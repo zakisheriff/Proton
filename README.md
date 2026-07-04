@@ -17,13 +17,40 @@ design used by Llama 3, Qwen, DeepSeek, and (per public research) Claude-class m
 
 ## Pipeline
 
+The full stack every frontier lab runs — training, alignment, and serving:
+
 | Stage | Command | What it does |
 |---|---|---|
-| 1. Data | `python3 scripts/prepare_data.py --src <dirs> --out data/corpus.txt` | Builds a training corpus from code files |
-| 2. Tokenizer | `python3 -m proton1.tokenizer --corpus data/corpus.txt --vocab 4096 --out data/tokenizer.json` | Trains byte-level BPE |
-| 3. Pretrain | `python3 -m proton1.pretrain --config nano` | Next-token pretraining |
-| 4. SFT | `python3 -m proton1.sft --config nano` | Turns the base model into an assistant |
-| 5. Chat | `python3 -m proton1.generate --ckpt checkpoints/nano-sft.pt --chat` | Talk to Proton 1 |
+| 1. Data (local) | `make data` | Builds a corpus from local code files |
+| 1. Data (real) | `make download` | Streams a real code corpus from HuggingFace (The Stack / codeparrot) |
+| 2. Tokenizer | `make tokenizer` | Trains byte-level BPE |
+| 3. Tokenize | `make tokens` | Packs the corpus into a token tensor |
+| 4. Pretrain | `make pretrain CONFIG=nano` | Next-token pretraining (single device) |
+| 4. Pretrain (multi-GPU) | `torchrun --nproc_per_node=N -m proton1.train_fsdp --config small` | FSDP distributed pretraining |
+| 5. SFT | `make sft` | Instruction-tunes the base model into an assistant |
+| 6. RL | `make rl` | RL with execution rewards (GRPO) — runs code, rewards passing tests |
+| 7. Eval | `make eval` | pass@k over a code problem set, sandboxed |
+| 8. Chat | `make chat` | Talk to Proton 1 locally |
+
+## Serving Proton 1 as an API
+
+Others consume Proton 1 exactly like the OpenAI/Qwen/GLM APIs:
+
+```
+client (OpenAI SDK) ──▶ Node/Express gateway :8080 ──▶ Python inference server :8000
+                         (API keys, rate limits,        (the model)
+                          usage metering)
+```
+
+```bash
+make serve      # terminal 1: Python inference server (OpenAI-compatible)
+make gateway    # terminal 2: Node/Express gateway (auth + limits + metering)
+python3 examples/client.py   # call it with the OpenAI SDK
+```
+
+Endpoints: `POST /v1/chat/completions`, `POST /v1/completions`, `GET /v1/models`,
+`GET /v1/usage` (per-key). Auth is `Authorization: Bearer <key>`; keys are set via
+the `PROTON_KEYS` env var on the gateway.
 
 ## Scaling roadmap
 

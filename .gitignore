@@ -94,6 +94,10 @@ python-local-env/
 # macOS system files
 .DS_Store
 
+# Node (serving/gateway)
+node_modules/
+npm-debug.log*
+
 # Machine Learning / Projects specifics
 # Large files and checkpoints
 checkpoints/
