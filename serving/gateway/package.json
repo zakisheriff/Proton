@@ -1,0 +1,14 @@
+{
+  "name": "proton1-gateway",
+  "version": "0.1.0",
+  "description": "Proton 1 API gateway — API keys, rate limiting, usage metering",
+  "type": "module",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2"
+  }
+}

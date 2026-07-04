@@ -1,0 +1,10 @@
+# Core training/inference
+torch>=2.2
+
+# Data acquisition (optional — only for scripts/download_data.py)
+datasets>=2.18
+
+# Serving (optional — only for serving/server.py)
+fastapi>=0.110
+uvicorn>=0.29
+pydantic>=2.6
