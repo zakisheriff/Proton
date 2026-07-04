@@ -54,7 +54,7 @@ PRESETS: dict[str, Preset] = {
     "nano": Preset(
         name="nano",
         model=ModelConfig(vocab_size=2048, dim=256, n_layers=6, n_heads=8,
-                          n_kv_heads=4, max_seq_len=256),
+                          n_kv_heads=4, max_seq_len=512),
         train=TrainConfig(batch_size=16, grad_accum_steps=2, max_steps=600,
                           warmup_steps=40, eval_interval=100),
     ),
