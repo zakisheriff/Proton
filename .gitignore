@@ -81,6 +81,7 @@ venv/
 ENV/
 env/
 python-local-env/
+.venv-mlx/
 
 # IDEs and Editors
 .idea/
@@ -99,28 +100,21 @@ node_modules/
 npm-debug.log*
 
 # Machine Learning / Projects specifics
-# Large files and checkpoints
+# Large files, checkpoints, and adapters
 checkpoints/
+adapters/
 *.pt
 *.bin
 *.pth
 *.ckpt
 *.h5
 *.onnx
+*.safetensors
 
-# Data files (keep the data folder structure if needed, but ignore raw/processed datasets)
-data/*.pt
-data/*.jsonl
-data/*.txt
-data/*.json
-data/*.npy
-data/*.npz
-data/*.csv
-data/*.parquet
-data/*.tsv
-data/*.zip
-data/*.tar.gz
+# Data files (ignore everything in data/ directory)
+data/
 
 # Local agent testing workspaces
 workspace/
+
 
